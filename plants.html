@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plants - Green Leaf Nursery</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🌱 Green Leaf</div>
+    <h1>Green Leaf Nursery</h1>
+    <p>Bring Nature Home</p>
+</header>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="plants.html">Plants</a>
+    <a href="about.html">About</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="services.html">Services</a>
+    <a href="care.html">Plant Care</a>
+    <a href="order.html">Order</a>
+    <a href="contact.html">Contact</a>
+</nav>
+
+<section>
+    <h2>🍃 Our Plants</h2>
+
+    <p>Choose beautiful plants for your home and garden.</p>
+
+    <div class="plant-container">
+
+        <div class="plant-card">
+            <img src="images/plant1.jpeg" alt="Indoor Plant">
+            <h3>🌿 Indoor Plant</h3>
+            <p>Perfect for decorating your home.</p>
+            <p><b>Price: ₹299</b></p>
+            <button onclick="addToCart('Indoor Plant', 299)">
+    🛒 Add to Cart
+</button>
+        </div>
+
+        <div class="plant-card">
+            <img src="images/plant2.jpeg" alt="Flower Plant">
+            <h3>🌸 Flower Plant</h3>
+            <p>Beautiful flowers for your garden.</p>
+            <p><b>Price: ₹199</b></p>
+            <button onclick="addToCart('Flower Plant', 199)">
+    🛒 Add to Cart
+</button>
+        </div>
+
+        <div class="plant-card">
+            <img src="images/plant3.jpeg" alt="Beautiful Plant">
+            <h3>🍃 Outdoor Plant</h3>
+            <p>A beautiful plant for your home.</p>
+            <p><b>Price: ₹249</b></p>
+            <button onclick="addToCart('Outdoor Plant', 249)">
+    🛒 Add to Cart
+</button>
+        </div>
+
+    </div>
+
+    <br>
+
+    <a href="order.html">
+        <button>🛒 Order Plants</button>
+    </a>
+
+</section>
+<footer>
+    <p>© 2026 Green Leaf Nursery | Bring Nature Home 🌱</p>
+</footer>
+<script>
+function addToCart(name, price) {
+    let cart = JSON.parse(localStorage.getItem("plantCart")) || [];
+
+    const existingPlant = cart.find(plant => plant.name === name);
+
+    if (existingPlant) {
+        existingPlant.quantity += 1;
+    } else {
+        cart.push({
+            name: name,
+            price: price,
+            quantity: 1
+        });
+    }
+
+    localStorage.setItem("plantCart", JSON.stringify(cart));
+
+    alert(name + " added to cart successfully! 🌱");
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Green Leaf Nursery</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🌱 Green Leaf</div>
+    <h1>Green Leaf Nursery</h1>
+    <p>Bring Nature Home</p>
+</header>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="plants.html">Plants</a>
+    <a href="about.html">About</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="services.html">Services</a>
+    <a href="care.html">Plant Care</a>
+    <a href="order.html">Order</a>
+    <a href="contact.html">Contact</a>
+    <a href="admin.html">Admin Orders</a>
+</nav>
+
+<section class="home">
+    <h2>🌿 Welcome to Green Leaf Nursery</h2>
+
+    <p>
+        Bring nature into your home with our beautiful collection of plants.
+        Choose your favourite plants and make your home fresh and green.
+    </p>
+
+    <img src="images/plant1.jpeg"
+         alt="Beautiful Indoor Plant"
+         width="300">
+
+    <br><br>
+
+    <a href="plants.html">
+        <button>🌱 Explore Plants</button>
+    </a>
+</section>
+<footer>
+    <p>© 2026 Green Leaf Nursery | Bring Nature Home 🌱</p>
+</footer>
+<div id="backend-message">Connecting to server...</div>
+
+<script>
+fetch("http://localhost:5000/api/message")
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById("backend-message").textContent =
+      data.message;
+  })
+  .catch(error => {
+    document.getElementById("backend-message").textContent =
+      "Backend connection failed!";
+    console.error(error);
+  });
+</script>
+</body>
+</html>

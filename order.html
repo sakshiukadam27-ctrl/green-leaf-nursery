@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart & Payment - Green Leaf Nursery</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f8f2;
+            color: #263528;
+        }
+
+        header {
+            background: #2e7d32;
+            color: white;
+            text-align: center;
+            padding: 22px 12px;
+        }
+
+        header h1 { margin: 0 0 8px; }
+        header p { margin-bottom: 0; }
+
+        nav {
+            background: #1b3d25;
+            padding: 12px 8px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px 8px;
+        }
+
+        nav a:hover { color: #b9f6ca; }
+
+        main {
+            max-width: 900px;
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .section {
+            background: white;
+            padding: 22px;
+            margin-bottom: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0000000d;
+        }
+
+        h2 { color: #2e7d32; margin-top: 0; }
+
+        .cart-item {
+            border: 1px solid #d6e5d5;
+            border-radius: 9px;
+            padding: 15px;
+            margin: 12px 0;
+        }
+
+        .item-name {
+            font-weight: bold;
+            font-size: 17px;
+            margin-top: 0;
+        }
+
+        .item-price { color: #506450; }
+
+        .cart-controls {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .qty-btn {
+            background: #e0f2d8;
+            color: #205b28;
+            font-weight: bold;
+            min-width: 40px;
+        }
+
+        .remove-btn, .clear-btn {
+            background: #ffebee;
+            color: #a11b2b;
+        }
+
+        .clear-btn { margin-top: 12px; }
+
+        .cart-summary {
+            background: #f0f8ed;
+            border-radius: 9px;
+            padding: 16px;
+            margin-top: 18px;
+        }
+
+        .total {
+            font-size: 23px;
+            font-weight: bold;
+            color: #246b2c;
+            margin-bottom: 0;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 13px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            border: 1px solid #b8c8b7;
+            border-radius: 6px;
+            font: inherit;
+        }
+
+        input:focus, textarea:focus {
+            outline: 2px solid #a5d6a7;
+            border-color: #2e7d32;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border: 1px solid #cbdcc9;
+            border-radius: 9px;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+
+        .payment-option input {
+            width: 18px;
+            height: 18px;
+            accent-color: #2e7d32;
+        }
+
+        #upi-section {
+            display: none;
+            text-align: center;
+            border: 1px solid #cbdcc9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 16px;
+            background: #f7fff5;
+        }
+
+        #upi-qr {
+            display: block;
+            width: 220px;
+            max-width: 100%;
+            height: auto;
+            margin: 15px auto;
+        }
+
+        .notice {
+            color: #744b12;
+            background: #fff8e1;
+            padding: 12px;
+            border-radius: 7px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .primary-btn {
+            background: #2e7d32;
+            color: white;
+            width: 100%;
+            padding: 14px;
+            margin-top: 18px;
+            font-weight: bold;
+        }
+
+        .primary-btn:hover { background: #256629; }
+
+        .secondary-btn {
+            background: #e5eee3;
+            color: #234b25;
+        }
+
+        #order-message {
+            overflow-wrap: anywhere;
+            line-height: 1.6;
+            font-weight: bold;
+        }
+
+        .success { color: #216b2b; }
+        .error { color: #b42318; }
+
+        .empty-cart {
+            padding: 20px;
+            text-align: center;
+            background: #f7faf6;
+            border-radius: 8px;
+        }
+
+        .empty-cart a {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        footer {
+            background: #1b3d25;
+            color: white;
+            text-align: center;
+            padding: 18px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .section { padding: 16px; }
+            .cart-controls { gap: 7px; }
+            nav a { margin: 5px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🌱 Green Leaf Nursery</h1>
+    <p>Bring Nature Home</p>
+</header>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="plants.html">Plants</a>
+    <a href="about.html">About</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="services.html">Services</a>
+    <a href="care.html">Plant Care</a>
+    <a href="order.html">View Cart</a>
+    <a href="contact.html">Contact</a>
+</nav>
+
+<main>
+
+    <!-- SHOPPING CART -->
+    <section class="section">
+        <h2>🛒 Your Shopping Cart</h2>
+
+        <div id="cart-items"></div>
+
+        <div class="cart-summary">
+            <p id="item-count">Total items: 0</p>
+            <p class="total" id="total-price">Total: ₹0.00</p>
+        </div>
+
+        <button type="button" class="clear-btn"
+                id="clear-cart-btn">
+            Clear Cart
+        </button>
+
+        <p>
+            Want more plants?
+            <a href="plants.html">Continue Shopping</a>
+        </p>
+    </section>
+
+    <!-- CUSTOMER DETAILS AND PAYMENT -->
+    <section class="section">
+        <h2>📦 Customer Details</h2>
+
+        <form id="order-form">
+
+            <label for="customer-name">Full Name</label>
+            <input type="text" id="customer-name"
+                   maxlength="100" autocomplete="name"
+                   placeholder="Enter your full name" required>
+
+            <label for="customer-email">Email Address</label>
+            <input type="email" id="customer-email"
+                   maxlength="254" autocomplete="email"
+                   placeholder="Enter your email" required>
+
+            <label for="customer-address">Delivery Address</label>
+            <textarea id="customer-address"
+                      maxlength="500" autocomplete="street-address"
+                      rows="4" placeholder="Enter complete delivery address"
+                      required></textarea>
+
+            <h2 style="margin-top:25px;">💳 Payment Method</h2>
+
+            <label class="payment-option">
+                <input type="radio" name="paymentMethod"
+                       value="UPI" required>
+                <span>📱 UPI Payment (Google Pay QR)</span>
+            </label>
+
+            <label class="payment-option">
+                <input type="radio" name="paymentMethod"
+                       value="COD" required>
+                <span>💵 Cash on Delivery</span>
+            </label>
+
+            <!-- GOOGLE PAY QR -->
+            <div id="upi-section">
+                <h3>📱 Scan to Pay</h3>
+                <p>Green Leaf Nursery</p>
+
+                <img
+                    id="upi-qr"
+                    src="./images/upi-qr.png"
+                    alt="Google Pay UPI QR Code"
+                >
+
+                <p class="notice">
+                    Scan the QR code using your UPI app.
+                    Check the receiver's name before paying.
+                    Your payment is not automatically verified
+                    by this website. Please confirm the transaction
+                    separately.
+                </p>
+            </div>
+
+            <button type="submit" class="primary-btn"
+                    id="place-order-button">
+                Place Order
+            </button>
+
+        </form>
+
+        <p id="order-message" role="status"
+           aria-live="polite"></p>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 Green Leaf Nursery | Bring Nature Home 🌿</p>
+</footer>
+
+<script>
+    const API_URL = "http://localhost:5000/api/orders";
+
+    function getCart() {
+        try {
+            const cart = JSON.parse(
+                localStorage.getItem("plantCart") || "[]"
+            );
+
+            if (!Array.isArray(cart)) return [];
+
+            return cart.filter(plant =>
+                plant &&
+                typeof plant.name === "string" &&
+                Number.isFinite(Number(plant.price)) &&
+                Number(plant.price) >= 0 &&
+                Number.isInteger(Number(plant.quantity)) &&
+                Number(plant.quantity) > 0
+            ).map(plant => ({
+                name: plant.name,
+                price: Number(plant.price),
+                quantity: Number(plant.quantity)
+            }));
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function saveCart(cart) {
+        localStorage.setItem("plantCart", JSON.stringify(cart));
+    }
+
+    function money(amount) {
+        return "₹" + Number(amount).toFixed(2);
+    }
+
+    function showMessage(message, type) {
+        const element = document.getElementById("order-message");
+        element.textContent = message;
+        element.className = type || "";
+    }
+
+    function showCart() {
+        const cart = getCart();
+        const container = document.getElementById("cart-items");
+        const totalElement = document.getElementById("total-price");
+        const countElement = document.getElementById("item-count");
+        const clearButton = document.getElementById("clear-cart-btn");
+
+        container.replaceChildren();
+
+        let total = 0;
+        let count = 0;
+
+        if (cart.length === 0) {
+            const empty = document.createElement("div");
+            empty.className = "empty-cart";
+
+            const message = document.createElement("p");
+            message.textContent = "Your cart is empty. 🌱";
+
+            const link = document.createElement("a");
+            link.href = "plants.html";
+            link.textContent = "Browse plants";
+
+            empty.append(message, link);
+            container.appendChild(empty);
+        }
+
+        cart.forEach((plant, index) => {
+            const subtotal = plant.price * plant.quantity;
+
+            total += subtotal;
+            count += plant.quantity;
+
+            const item = document.createElement("div");
+            item.className = "cart-item";
+
+            const name = document.createElement("p");
+            name.className = "item-name";
+            name.textContent = plant.name;
+
+            const price = document.createElement("p");
+            price.className = "item-price";
+            price.textContent =
+                money(plant.price) + " each";
+
+            const subtotalText = document.createElement("p");
+            subtotalText.textContent =
+                "Subtotal: " + money(subtotal);
+
+            const controls = document.createElement("div");
+            controls.className = "cart-controls";
+
+            const minus = document.createElement("button");
+            minus.type = "button";
+            minus.className = "qty-btn";
+            minus.textContent = "−";
+            minus.setAttribute("aria-label", "Decrease quantity");
+
+            minus.addEventListener("click", () => {
+                const updated = getCart();
+
+                if (!updated[index]) return;
+
+                if (updated[index].quantity > 1) {
+                    updated[index].quantity--;
+                } else {
+                    updated.splice(index, 1);
+                }
+
+                saveCart(updated);
+                showCart();
+            });
+
+            const quantity = document.createElement("span");
+            quantity.textContent = "Qty: " + plant.quantity;
+
+            const plus = document.createElement("button");
+            plus.type = "button";
+            plus.className = "qty-btn";
+            plus.textContent = "+";
+            plus.setAttribute("aria-label", "Increase quantity");
+
+            plus.addEventListener("click", () => {
+                const updated = getCart();
+
+                if (!updated[index]) return;
+
+                updated[index].quantity++;
+                saveCart(updated);
+                showCart();
+            });
+
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.className = "remove-btn";
+            remove.textContent = "Remove";
+
+            remove.addEventListener("click", () => {
+                const updated = getCart();
+                updated.splice(index, 1);
+                saveCart(updated);
+                showCart();
+            });
+
+            controls.append(minus, quantity, plus, remove);
+            item.append(name, price, subtotalText, controls);
+            container.appendChild(item);
+        });
+
+        totalElement.textContent = "Total: " + money(total);
+        countElement.textContent = "Total items: " + count;
+        clearButton.disabled = cart.length === 0;
+    }
+
+    // Show QR only when UPI is selected.
+    document.querySelectorAll(
+        'input[name="paymentMethod"]'
+    ).forEach(option => {
+        option.addEventListener("change", () => {
+            const selected = document.querySelector(
+                'input[name="paymentMethod"]:checked'
+            );
+
+            document.getElementById("upi-section").style.display =
+                selected && selected.value === "UPI"
+                    ? "block"
+                    : "none";
+
+            showMessage("", "");
+        });
+    });
+
+    // Clear all cart items.
+    document.getElementById("clear-cart-btn")
+        .addEventListener("click", () => {
+            if (!getCart().length) return;
+
+            const confirmed = confirm(
+                "Are you sure you want to clear your cart?"
+            );
+
+            if (!confirmed) return;
+
+            saveCart([]);
+            showCart();
+            showMessage("Your cart has been cleared.", "");
+        });
+
+    // Submit order to the backend.
+    document.getElementById("order-form")
+        .addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const button = document.getElementById(
+                "place-order-button"
+            );
+
+            const cart = getCart();
+
+            if (cart.length === 0) {
+                showMessage(
+                    "Your cart is empty. Please add plants first.",
+                    "error"
+                );
+                return;
+            }
+
+            const paymentMethod = document.querySelector(
+                'input[name="paymentMethod"]:checked'
+            )?.value;
+
+            if (!["UPI", "COD"].includes(paymentMethod)) {
+                showMessage(
+                    "Please select a payment method.",
+                    "error"
+                );
+                return;
+            }
+
+            const order = {
+                customerName: document.getElementById(
+                    "customer-name"
+                ).value.trim(),
+
+                email: document.getElementById(
+                    "customer-email"
+                ).value.trim(),
+
+                address: document.getElementById(
+                    "customer-address"
+                ).value.trim(),
+
+                paymentMethod: paymentMethod,
+                items: cart
+            };
+
+            if (!order.customerName ||
+                !order.email ||
+                !order.address) {
+                showMessage(
+                    "Please fill in all customer details.",
+                    "error"
+                );
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = "Submitting...";
+            showMessage("Submitting your order...", "");
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(order)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.message || "Could not submit order."
+                    );
+                }
+
+                const paymentMessage = paymentMethod === "UPI"
+                    ? "UPI selected. Payment is not verified by the website."
+                    : "Cash on Delivery selected.";
+
+                showMessage(
+                    "Order submitted successfully! Order ID: " +
+                    result.orderId +
+                    ". Total: " + money(result.total) +
+                    ". " + paymentMessage,
+                    "success"
+                );
+
+                // Clear the cart only after the server accepts the order.
+                localStorage.removeItem("plantCart");
+                showCart();
+
+                this.reset();
+
+                document.getElementById("upi-section").style.display =
+                    "none";
+
+            } catch (error) {
+                console.error("Order error:", error);
+
+                showMessage(
+                    "Order could not be submitted. Check that your backend is running on port 5000 and try again.",
+                    "error"
+                );
+            } finally {
+                button.disabled = false;
+                button.textContent = "Place Order";
+            }
+        });
+
+    // Warn if the QR image cannot be loaded.
+    document.getElementById("upi-qr")
+        .addEventListener("error", function() {
+            this.alt =
+                "QR image not found. Check images/upi-qr.png";
+        });
+
+    showCart();
+</script>
+
+</body>
+</html>
